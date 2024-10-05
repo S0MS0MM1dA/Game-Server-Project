@@ -37,13 +37,14 @@
             this.txtUsername = new Krypton.Toolkit.KryptonTextBox();
             this.btnLogin = new CuoreUI.Controls.cuiButton();
             this.btnAdmin = new System.Windows.Forms.Button();
-            this.cuiButton1 = new CuoreUI.Controls.cuiButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
-            this.txtpass = new Krypton.Toolkit.KryptonTextBox();
+            this.createbtn = new System.Windows.Forms.Button();
+            this.exitbtn = new CuoreUI.Controls.cuiButton();
             this.showPassBtn = new CuoreUI.Controls.cuiButton();
             this.HidePassBtn = new CuoreUI.Controls.cuiButton();
-            this.createbtn = new System.Windows.Forms.Button();
+            this.txtpass = new Krypton.Toolkit.KryptonTextBox();
+            this.loading = new GameServer_Management.Controller.Loading();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +58,6 @@
             this.label2.Size = new System.Drawing.Size(337, 21);
             this.label2.TabIndex = 4;
             this.label2.Text = "Please enter your username and password";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // label1
             // 
@@ -134,13 +134,14 @@
             this.btnLogin.NormalBackground = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(26)))), ((int)(((byte)(48)))));
             this.btnLogin.NormalOutline = System.Drawing.Color.Transparent;
             this.btnLogin.OutlineThickness = 1.6F;
-            this.btnLogin.PressedBackground = System.Drawing.Color.Coral;
+            this.btnLogin.PressedBackground = System.Drawing.Color.SlateGray;
             this.btnLogin.PressedImageTint = System.Drawing.Color.White;
             this.btnLogin.PressedOutline = System.Drawing.Color.Empty;
             this.btnLogin.Rounding = new System.Windows.Forms.Padding(20);
             this.btnLogin.Size = new System.Drawing.Size(333, 50);
             this.btnLogin.TabIndex = 10;
             this.btnLogin.TextOffset = new System.Drawing.Point(0, 0);
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnAdmin
             // 
@@ -160,41 +161,6 @@
             this.btnAdmin.UseVisualStyleBackColor = true;
             this.btnAdmin.Click += new System.EventHandler(this.btnAdmin_Click);
             // 
-            // cuiButton1
-            // 
-            this.cuiButton1.AutoSize = true;
-            this.cuiButton1.BackColor = System.Drawing.Color.Transparent;
-            this.cuiButton1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.cuiButton1.CheckButton = false;
-            this.cuiButton1.Checked = false;
-            this.cuiButton1.CheckedBackground = System.Drawing.Color.Transparent;
-            this.cuiButton1.CheckedImageTint = System.Drawing.Color.Transparent;
-            this.cuiButton1.CheckedOutline = System.Drawing.Color.Brown;
-            this.cuiButton1.Content = "";
-            this.cuiButton1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.cuiButton1.ForeColor = System.Drawing.Color.White;
-            this.cuiButton1.HoverBackground = System.Drawing.Color.Red;
-            this.cuiButton1.HoveredImageTint = System.Drawing.Color.White;
-            this.cuiButton1.HoverOutline = System.Drawing.Color.White;
-            this.cuiButton1.Image = ((System.Drawing.Image)(resources.GetObject("cuiButton1.Image")));
-            this.cuiButton1.ImageAutoCenter = true;
-            this.cuiButton1.ImageExpand = new System.Drawing.Point(5, 5);
-            this.cuiButton1.ImageOffset = new System.Drawing.Point(0, 0);
-            this.cuiButton1.ImageTint = System.Drawing.Color.White;
-            this.cuiButton1.Location = new System.Drawing.Point(1136, 4);
-            this.cuiButton1.Name = "cuiButton1";
-            this.cuiButton1.NormalBackground = System.Drawing.Color.Transparent;
-            this.cuiButton1.NormalOutline = System.Drawing.Color.Transparent;
-            this.cuiButton1.OutlineThickness = 0F;
-            this.cuiButton1.PressedBackground = System.Drawing.Color.Cornsilk;
-            this.cuiButton1.PressedImageTint = System.Drawing.Color.White;
-            this.cuiButton1.PressedOutline = System.Drawing.Color.Coral;
-            this.cuiButton1.Rounding = new System.Windows.Forms.Padding(20);
-            this.cuiButton1.Size = new System.Drawing.Size(40, 36);
-            this.cuiButton1.TabIndex = 15;
-            this.cuiButton1.TextOffset = new System.Drawing.Point(0, 0);
-            this.cuiButton1.Click += new System.EventHandler(this.cuiButton1_Click);
-            // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -204,31 +170,67 @@
             this.pictureBox1.Size = new System.Drawing.Size(1181, 665);
             this.pictureBox1.TabIndex = 16;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            this.pictureBox1.MouseHover += new System.EventHandler(this.pictureBox1_MouseHover);
             // 
             // bunifuElipse1
             // 
             this.bunifuElipse1.ElipseRadius = 30;
             this.bunifuElipse1.TargetControl = this;
             // 
-            // txtpass
+            // createbtn
             // 
-            this.txtpass.CornerRoundingRadius = 30F;
-            this.txtpass.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.txtpass.Location = new System.Drawing.Point(92, 386);
-            this.txtpass.Name = "txtpass";
-            this.txtpass.PasswordChar = '*';
-            this.txtpass.Size = new System.Drawing.Size(333, 51);
-            this.txtpass.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(53)))), ((int)(((byte)(58)))));
-            this.txtpass.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(53)))), ((int)(((byte)(58)))));
-            this.txtpass.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
-            | Krypton.Toolkit.PaletteDrawBorders.Left) 
-            | Krypton.Toolkit.PaletteDrawBorders.Right)));
-            this.txtpass.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
-            this.txtpass.StateCommon.Border.Rounding = 30F;
-            this.txtpass.StateCommon.Content.Color1 = System.Drawing.Color.White;
-            this.txtpass.StateCommon.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtpass.TabIndex = 19;
+            this.createbtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.createbtn.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.createbtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.createbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.createbtn.ForeColor = System.Drawing.Color.MediumPurple;
+            this.createbtn.Image = ((System.Drawing.Image)(resources.GetObject("createbtn.Image")));
+            this.createbtn.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.createbtn.Location = new System.Drawing.Point(150, 532);
+            this.createbtn.Name = "createbtn";
+            this.createbtn.Padding = new System.Windows.Forms.Padding(27, 0, 0, 0);
+            this.createbtn.Size = new System.Drawing.Size(206, 41);
+            this.createbtn.TabIndex = 26;
+            this.createbtn.Text = "Create an account";
+            this.createbtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.createbtn.UseVisualStyleBackColor = true;
+            this.createbtn.Click += new System.EventHandler(this.createbtn_Click);
+            // 
+            // exitbtn
+            // 
+            this.exitbtn.AutoSize = true;
+            this.exitbtn.BackColor = System.Drawing.Color.Transparent;
+            this.exitbtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.exitbtn.CheckButton = false;
+            this.exitbtn.Checked = false;
+            this.exitbtn.CheckedBackground = System.Drawing.Color.Transparent;
+            this.exitbtn.CheckedImageTint = System.Drawing.Color.Transparent;
+            this.exitbtn.CheckedOutline = System.Drawing.Color.Transparent;
+            this.exitbtn.Content = "";
+            this.exitbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.exitbtn.ForeColor = System.Drawing.Color.Transparent;
+            this.exitbtn.HoverBackground = System.Drawing.Color.Transparent;
+            this.exitbtn.HoveredImageTint = System.Drawing.Color.White;
+            this.exitbtn.HoverOutline = System.Drawing.Color.Transparent;
+            this.exitbtn.Image = ((System.Drawing.Image)(resources.GetObject("exitbtn.Image")));
+            this.exitbtn.ImageAutoCenter = true;
+            this.exitbtn.ImageExpand = new System.Drawing.Point(5, 5);
+            this.exitbtn.ImageOffset = new System.Drawing.Point(0, 0);
+            this.exitbtn.ImageTint = System.Drawing.Color.White;
+            this.exitbtn.Location = new System.Drawing.Point(1129, 4);
+            this.exitbtn.Name = "exitbtn";
+            this.exitbtn.NormalBackground = System.Drawing.Color.Transparent;
+            this.exitbtn.NormalOutline = System.Drawing.Color.Transparent;
+            this.exitbtn.OutlineThickness = 0F;
+            this.exitbtn.PressedBackground = System.Drawing.Color.Transparent;
+            this.exitbtn.PressedImageTint = System.Drawing.Color.White;
+            this.exitbtn.PressedOutline = System.Drawing.Color.Transparent;
+            this.exitbtn.Rounding = new System.Windows.Forms.Padding(20);
+            this.exitbtn.Size = new System.Drawing.Size(40, 36);
+            this.exitbtn.TabIndex = 27;
+            this.exitbtn.TextOffset = new System.Drawing.Point(0, 0);
+            this.exitbtn.Click += new System.EventHandler(this.exitbtn_Click);
+            this.exitbtn.MouseHover += new System.EventHandler(this.exitbtn_MouseHover);
             // 
             // showPassBtn
             // 
@@ -249,7 +251,7 @@
             this.showPassBtn.ImageExpand = new System.Drawing.Point(5, 5);
             this.showPassBtn.ImageOffset = new System.Drawing.Point(0, 0);
             this.showPassBtn.ImageTint = System.Drawing.Color.White;
-            this.showPassBtn.Location = new System.Drawing.Point(373, 393);
+            this.showPassBtn.Location = new System.Drawing.Point(379, 394);
             this.showPassBtn.Name = "showPassBtn";
             this.showPassBtn.NormalBackground = System.Drawing.Color.Transparent;
             this.showPassBtn.NormalOutline = System.Drawing.Color.Transparent;
@@ -259,9 +261,9 @@
             this.showPassBtn.PressedOutline = System.Drawing.Color.White;
             this.showPassBtn.Rounding = new System.Windows.Forms.Padding(15);
             this.showPassBtn.Size = new System.Drawing.Size(39, 36);
-            this.showPassBtn.TabIndex = 24;
+            this.showPassBtn.TabIndex = 29;
             this.showPassBtn.TextOffset = new System.Drawing.Point(0, 0);
-            this.showPassBtn.Click += new System.EventHandler(this.showPassBtn_Click);
+            this.showPassBtn.Click += new System.EventHandler(this.showPassBtn_Click_1);
             // 
             // HidePassBtn
             // 
@@ -282,7 +284,7 @@
             this.HidePassBtn.ImageExpand = new System.Drawing.Point(5, 5);
             this.HidePassBtn.ImageOffset = new System.Drawing.Point(0, 0);
             this.HidePassBtn.ImageTint = System.Drawing.Color.White;
-            this.HidePassBtn.Location = new System.Drawing.Point(373, 393);
+            this.HidePassBtn.Location = new System.Drawing.Point(379, 394);
             this.HidePassBtn.Name = "HidePassBtn";
             this.HidePassBtn.NormalBackground = System.Drawing.Color.Transparent;
             this.HidePassBtn.NormalOutline = System.Drawing.Color.Transparent;
@@ -292,26 +294,37 @@
             this.HidePassBtn.PressedOutline = System.Drawing.Color.White;
             this.HidePassBtn.Rounding = new System.Windows.Forms.Padding(15);
             this.HidePassBtn.Size = new System.Drawing.Size(39, 36);
-            this.HidePassBtn.TabIndex = 25;
+            this.HidePassBtn.TabIndex = 30;
             this.HidePassBtn.TextOffset = new System.Drawing.Point(0, 0);
+            this.HidePassBtn.Click += new System.EventHandler(this.HidePassBtn_Click_1);
             // 
-            // createbtn
+            // txtpass
             // 
-            this.createbtn.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.createbtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.createbtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.createbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.createbtn.ForeColor = System.Drawing.Color.MediumPurple;
-            this.createbtn.Image = ((System.Drawing.Image)(resources.GetObject("createbtn.Image")));
-            this.createbtn.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.createbtn.Location = new System.Drawing.Point(150, 532);
-            this.createbtn.Name = "createbtn";
-            this.createbtn.Padding = new System.Windows.Forms.Padding(27, 0, 0, 0);
-            this.createbtn.Size = new System.Drawing.Size(206, 41);
-            this.createbtn.TabIndex = 26;
-            this.createbtn.Text = "Create an account";
-            this.createbtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.createbtn.UseVisualStyleBackColor = true;
+            this.txtpass.CornerRoundingRadius = 30F;
+            this.txtpass.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.txtpass.Location = new System.Drawing.Point(92, 387);
+            this.txtpass.Name = "txtpass";
+            this.txtpass.PasswordChar = '*';
+            this.txtpass.Size = new System.Drawing.Size(333, 51);
+            this.txtpass.StateCommon.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(53)))), ((int)(((byte)(58)))));
+            this.txtpass.StateCommon.Border.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(53)))), ((int)(((byte)(58)))));
+            this.txtpass.StateCommon.Border.DrawBorders = ((Krypton.Toolkit.PaletteDrawBorders)((((Krypton.Toolkit.PaletteDrawBorders.Top | Krypton.Toolkit.PaletteDrawBorders.Bottom) 
+            | Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.txtpass.StateCommon.Border.GraphicsHint = Krypton.Toolkit.PaletteGraphicsHint.AntiAlias;
+            this.txtpass.StateCommon.Border.Rounding = 30F;
+            this.txtpass.StateCommon.Content.Color1 = System.Drawing.Color.White;
+            this.txtpass.StateCommon.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtpass.TabIndex = 28;
+            this.txtpass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Enter_Key);
+            // 
+            // loading
+            // 
+            this.loading.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.loading.Location = new System.Drawing.Point(516, 264);
+            this.loading.Name = "loading";
+            this.loading.Size = new System.Drawing.Size(221, 144);
+            this.loading.TabIndex = 31;
             // 
             // Login
             // 
@@ -319,11 +332,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1181, 665);
-            this.Controls.Add(this.createbtn);
+            this.Controls.Add(this.loading);
             this.Controls.Add(this.showPassBtn);
             this.Controls.Add(this.HidePassBtn);
             this.Controls.Add(this.txtpass);
-            this.Controls.Add(this.cuiButton1);
+            this.Controls.Add(this.exitbtn);
+            this.Controls.Add(this.createbtn);
             this.Controls.Add(this.btnAdmin);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.txtUsername);
@@ -353,12 +367,13 @@
         private Krypton.Toolkit.KryptonTextBox txtUsername;
         private CuoreUI.Controls.cuiButton btnLogin;
         private System.Windows.Forms.Button btnAdmin;
-        private CuoreUI.Controls.cuiButton cuiButton1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
-        private Krypton.Toolkit.KryptonTextBox txtpass;
+        private System.Windows.Forms.Button createbtn;
+        private CuoreUI.Controls.cuiButton exitbtn;
         private CuoreUI.Controls.cuiButton showPassBtn;
         private CuoreUI.Controls.cuiButton HidePassBtn;
-        private System.Windows.Forms.Button createbtn;
+        private Krypton.Toolkit.KryptonTextBox txtpass;
+        private Controller.Loading loading;
     }
 }

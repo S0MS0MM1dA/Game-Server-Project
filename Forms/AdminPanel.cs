@@ -1,4 +1,5 @@
-﻿using Krypton.Toolkit;
+﻿using GameServer_Management.Controller;
+using Krypton.Toolkit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,25 +20,69 @@ namespace GameServer_Management.Forms
         private AdminHome home = new AdminHome();
         private UserDB userDB = new UserDB();
         private AdminDB adminDB = new AdminDB();
+        private Download download = new Download();
+        //private SignUp signUp = new SignUp();
+        
+        private AdminHome adminhome;
+        private bool isAdmin;
+        private string code;
 
-        public AdminPanel()
+        public AdminPanel(bool isAdmin)
         {
             InitializeComponent();
             this.AutoScaleDimensions = new SizeF(96F, 96F);
             this.AutoScaleMode = AutoScaleMode.Dpi;
             cb = btnHome;
             cb.Checked = true;
+
+            this.isAdmin = isAdmin;
+            adminhome = new AdminHome(this);
+        }
+        public AdminPanel(bool isAdmin, string username)
+        {
+            InitializeComponent();
+            this.AutoScaleDimensions = new SizeF(96F, 96F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            cb = btnHome;
+            cb.Checked = true;
+
+            this.isAdmin = isAdmin;
+            usertxt.Text = username;
+            adminhome = new AdminHome(this);
+        }
+        public AdminPanel(string code)
+        {
+            InitializeComponent();
+            this.AutoScaleDimensions = new SizeF(96F, 96F);
+            this.AutoScaleMode = AutoScaleMode.Dpi;
+            
+            this.code = code;
+            next();
+        }
+
+        private void next()
+        {
+            //this.Close();
+            //getGame.Show();
+            //MessageBox.Show("Hello");
+            //LoadForm(getGame);
+            //getGame.BringToFront();
+            //Button(btnHome);
+            GetGame getGame = new GetGame();
+            mainpanel.Controls.Clear();
+            getGame.Dock = DockStyle.Fill;  // Make it fill the panel
+            mainpanel.Controls.Add(getGame);
+            mainpanel.Refresh();
         }
 
         static AdminPanel obj;
-        public static AdminPanel Instance
+        public static AdminPanel Instance(bool isAdmin)
         {
-            get { 
-                if (obj == null) 
-                { 
-                    obj = new AdminPanel();
-                } return obj; 
+            if (obj == null)
+            {
+                obj = new AdminPanel(isAdmin);
             }
+            return obj;
         }
         public void LoadForm(Form f)
         {
@@ -47,15 +92,17 @@ namespace GameServer_Management.Forms
                 return;
             }
 
-            if (this.mainpanel.Controls.Count > 0)
+            if (mainpanel.Controls.Count > 0)
             {
-                this.mainpanel.Controls.RemoveAt(0);
+                mainpanel.Controls.RemoveAt(0);
             }
 
             f.TopLevel = false;
             f.Dock = DockStyle.Fill;
+            //f.Parent = this;
             this.mainpanel.Controls.Add(f);
             this.mainpanel.Tag = f;
+            //f.Show();
             f.Visible = true;
         }
 
@@ -143,6 +190,20 @@ namespace GameServer_Management.Forms
             this.Opacity = 0;
             faddingTimer.Start();
             obj = this;
+            downloadbtn.Visible = false;
+            userpanel.Visible = false;
+
+            if (!isAdmin)
+            {
+                categoryBtn.Visible = false;
+                GameDBbtn.Visible = false;
+                adminDBbtn.Visible = false;
+                userDBbtn.Visible = false;
+                userpanel.Visible = true;
+                downloadbtn.Visible = true;
+                kryptonPanel1.Location = new Point(0, 318);
+                downloadbtn.Location = new Point(3, 62);
+            }
         }
 
         private void faddingTimer_Tick(object sender, EventArgs e)
@@ -206,11 +267,6 @@ namespace GameServer_Management.Forms
             Button(GameDBbtn);
         }
 
-        private void gameBtn_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void categoryBtn_Click(object sender, EventArgs e)
         {
             if (!categoryBtn.Checked)
@@ -224,9 +280,40 @@ namespace GameServer_Management.Forms
 
         private void logout_Click(object sender, EventArgs e)
         {
-            AdminLogin adminLogin = new AdminLogin();
-            adminLogin.Show();
-            this.Close();
+            if (!isAdmin)
+            {
+                Login l = new Login();
+                l.Show();
+                this.Close();
+            }
+            else
+            {
+                AdminLogin adminLogin = new AdminLogin();
+                adminLogin.Show();
+                this.Close();
+            }
+        }
+
+        private void downloadbtn_Click(object sender, EventArgs e)
+        {
+            if (!downloadbtn.Checked)
+            {
+                downloadbtn.Checked = true;
+                return;
+            }
+            LoadForm(download);
+            Button(downloadbtn);
+        }
+
+        private void userbtn_Click(object sender, EventArgs e)
+        {
+            /*if (!userbtn.Checked)
+            {
+                userbtn.Checked = true;
+                return;
+            }
+            LoadForm(signUp);
+            Button(userbtn);    */
         }
     }
 }

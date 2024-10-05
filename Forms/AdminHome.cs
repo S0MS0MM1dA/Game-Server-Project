@@ -2,6 +2,7 @@
 using GameServer_Management.Controller;
 using Krypton.Toolkit;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,8 +10,8 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,8 +19,11 @@ namespace GameServer_Management.Forms
 {
     public partial class AdminHome : Form
     {
+        private AdminPanel adminPanel;
+
         private KryptonCheckButton cb = new KryptonCheckButton();
-        List<string> imageAddress = new List<string>();
+        List<GameDesc> gameDescList = new List<GameDesc>();
+        List<(string imageAddress, string gameName, string gameDescription)> imageData = new List<(string, string, string)>();
         int countDown = 0;
 
         public AdminHome()
@@ -27,6 +31,12 @@ namespace GameServer_Management.Forms
             InitializeComponent();
             loading.Visible = true;
         }
+
+        public AdminHome(AdminPanel adminPanel)
+        {
+            InitializeComponent();
+            this.adminPanel = adminPanel;
+        }   
 
         private void Button(KryptonCheckButton button)
         {
@@ -146,7 +156,25 @@ namespace GameServer_Management.Forms
             }Button(b);
         }
 
-        private void AddItems(string id, string name, string cat,string price, Image img)
+        private async void Game_Click(object sender, EventArgs e)
+        {
+            //MessageBox.Show($"Game Title: {gameDesc.GName}\n\n{gameDesc.desc}");     
+            GameDesc clicked = sender as GameDesc;
+
+            if (clicked != null)
+            {
+                await Task.Delay(100);
+                getGame1.Visible = true;
+                getGame1.Pic = clicked.Pic;
+
+                getGame1.GName = clicked.GName;
+                getGame1.desc = clicked.desc;
+                getGame1.Price = clicked.Price;
+                getGame1.Category = clicked.Category;
+            }
+        }
+
+        private void AddItems(string id, string name, string cat,string price, Image img, string gameDescription)
         {
             var v = new GameDesc
             {
@@ -154,11 +182,17 @@ namespace GameServer_Management.Forms
                 Price = price,
                 Category = cat,
                 Pic = img,
-                id = Convert.ToInt32(id)
+                id = Convert.ToInt32(id),
+                desc = gameDescription,
+                //Date = date
             };
+
+            v.onSelect += new EventHandler(Game_Click);
             listPanel.Controls.Add(v);
+            v.BringToFront();   //loading data backward as well
+            //gameDescList.Add(v);
         }
-        private void LoadItems()
+        private async void LoadItems()
         {
             string query = "select * from gamestbl t1 inner join categorytbl t2 on t2.catID = t1.categoryID";
             using (SqlConnection con = DBconnect.GetConnection())
@@ -170,34 +204,33 @@ namespace GameServer_Management.Forms
                 }
                 try
                 {
-                    con.Open();
+                    await con.OpenAsync();
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
 
-                        imageAddress.Clear(); // reset address
+                        imageData.Clear();   // reset address
 
-                        foreach (DataRow item in dt.Rows)
+                        foreach (DataRow item in dt.Rows) 
                         {
-                            byte[] imgAry = (byte[])item["gameImage"];
-                            imageAddress.Add(Convert.ToBase64String(imgAry));
-                            Image img = Image.FromStream(new MemoryStream(imgAry));
+                            Byte[] imgAry = (byte[])item["gameImage"];
 
-                            AddItems(item["gameID"].ToString(), item["gameName"].ToString(), item["catName"].ToString(), item["gamePrice"].ToString(), img);
+                            string imgBase64 = Convert.ToBase64String(imgAry);
+                            string gamename = item["gameName"].ToString();
+                            string gamedescription = item["gameDesc"].ToString();
+                            imageData.Add((imgBase64, gamename, gamedescription));
+
+                            //imageData.Add((imgBase64, item["gameName"].ToString()));  // Store image and description
+                            Image img = Image.FromStream(new MemoryStream(imgAry)); //
+                            AddItems(item["gameID"].ToString(), item["gameName"].ToString(), item["catName"].ToString(), item["gamePrice"].ToString(), img, gamedescription);
                         }
-
                         countDown = 0; // Reset counter
                         slideImgTimer.Start(); // Start the timer after images are loaded
                     }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error! {ex.Message}");
-                }
+                }catch(Exception ex) { MessageBox.Show($"Error! {ex.Message}"); }
             }
-
         }
 
         private void searchtxtbox_TextChanged(object sender, EventArgs e)
@@ -212,6 +245,16 @@ namespace GameServer_Management.Forms
         private async void AdminHome_Click(object sender, EventArgs e)
         {
             loading.Visible = true;
+            //panel2.Controls.Clear();
+            panel1.Visible = false;
+            panel3.Visible = false;
+            searchtxtbox.Visible = false;
+            pictureBox1.Visible = false;
+            searchtxtbox.Clear();
+            this.ActiveControl = pictureBox1;
+            ResetSearchTextBox();
+            
+            
             loadingtimer.Start();
             listPanel.Controls.Clear();
             await Task.Delay(1000);
@@ -219,14 +262,17 @@ namespace GameServer_Management.Forms
             cb.Checked = false;
             LoadItems();
             AddCat();
-            //laodingpanel.Visible = true;
-            //timer.Start();
+            panel1.Visible = true;
+            panel3.Visible = true;
+            pictureBox1.Visible = true;
+            searchtxtbox.Visible = true;
         }
 
         private void AdminHome_Load(object sender, EventArgs e)
         {
             //laodingpanel.Visible = false;
             loading.Visible = true;
+            getGame1.Visible = false;
             loadingtimer.Start();
             AddCat();
             listPanel.Controls.Clear();
@@ -240,24 +286,50 @@ namespace GameServer_Management.Forms
             loading.Visible = false;
         }
 
-        private void slideImageBox_Click(object sender, EventArgs e)
-        {
-
-        }
         private void slideImgTimer_Tick(object sender, EventArgs e)
         {
-            if (countDown < imageAddress.Count)
+            if (countDown < imageData.Count)
             {
-                byte[] imgBytes = Convert.FromBase64String(imageAddress[countDown]);
+                //byte[] imgBytes = Convert.FromBase64String(imageData[countDown]);
+                byte[] imgBytes = Convert.FromBase64String(imageData[countDown].imageAddress);
                 using (MemoryStream ms = new MemoryStream(imgBytes))
                 {
                     slideImageBox.Image = Image.FromStream(ms);
                 }
+                nameLabel.Text = imageData[countDown].gameName;
+                gameDesc.Content = imageData[countDown].gameDescription;
                 countDown++;
             }
             else
             {
                 countDown = 0;
+            }
+        }
+
+        private void kryptonLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void searchtxtbox_Enter(object sender, EventArgs e)
+        {
+            if (searchtxtbox.Text == "Search Here...")
+            {
+                searchtxtbox.StateActive.Content.Color1 = Color.White;
+                searchtxtbox.Text = String.Empty;
+            }
+        }
+
+        private void searchtxtbox_Leave(object sender, EventArgs e)
+        {
+            ResetSearchTextBox();
+        }
+        private void ResetSearchTextBox()
+        {
+            if (searchtxtbox.Text == "")
+            {
+                searchtxtbox.Text = "Search Here...";
+                searchtxtbox.StateActive.Content.Color1 = Color.FromArgb(70, 71, 78);
             }
         }
     }

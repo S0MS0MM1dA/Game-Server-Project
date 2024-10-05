@@ -15,10 +15,23 @@ namespace GameServer_Management.Controller
         public GameDesc()
         {
             InitializeComponent();
+            this.MouseClick += GameImg_MouseClick;
+            this.MouseClick += gameName_MouseClick;
+            //this.MouseClick += GameDesc_MouseClick;
+
+            foreach (Control c in this.Controls)
+            {
+                c.MouseClick += GameImg_MouseClick;
+            } 
         }
-        public event EventHandler onSelect = null;
+        public event EventHandler onSelect; // = null
 
         public int id { get;set; }
+        public string desc 
+        {
+            get { return desclbl.Text; }
+            set { desclbl.Text = value; }
+        }
         public string GName 
         {
             get { return gameName.Text; }
@@ -39,8 +52,18 @@ namespace GameServer_Management.Controller
             get { return catName.Text; }
             set { catName.Text = value; }
         }
+        public string Date
+        {
+            get { return gameRelease.Text; }
+            set { gameRelease.Text = value; }
+        }
 
-        private void GameImg_Click(object sender, EventArgs e)
+        private void GameImg_MouseClick(object sender, MouseEventArgs e)
+        {
+            onSelect?.Invoke(this, e);
+        }
+
+        private void gameName_MouseClick(object sender, MouseEventArgs e)
         {
             onSelect?.Invoke(this, e);
         }

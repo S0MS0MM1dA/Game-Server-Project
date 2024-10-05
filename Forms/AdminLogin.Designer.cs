@@ -43,6 +43,7 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.exitbtn = new CuoreUI.Controls.cuiButton();
+            this.loading = new GameServer_Management.Controller.Loading();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -154,7 +155,7 @@
             this.btnLogin.NormalBackground = System.Drawing.Color.FromArgb(((int)(((byte)(22)))), ((int)(((byte)(26)))), ((int)(((byte)(48)))));
             this.btnLogin.NormalOutline = System.Drawing.Color.Transparent;
             this.btnLogin.OutlineThickness = 1.6F;
-            this.btnLogin.PressedBackground = System.Drawing.Color.Coral;
+            this.btnLogin.PressedBackground = System.Drawing.Color.SlateGray;
             this.btnLogin.PressedImageTint = System.Drawing.Color.White;
             this.btnLogin.PressedOutline = System.Drawing.Color.Empty;
             this.btnLogin.Rounding = new System.Windows.Forms.Padding(20);
@@ -299,12 +300,21 @@
             this.exitbtn.Click += new System.EventHandler(this.exitbtn_Click);
             this.exitbtn.MouseHover += new System.EventHandler(this.exitbtn_MouseHover);
             // 
+            // loading
+            // 
+            this.loading.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.loading.Location = new System.Drawing.Point(474, 243);
+            this.loading.Name = "loading";
+            this.loading.Size = new System.Drawing.Size(221, 144);
+            this.loading.TabIndex = 26;
+            // 
             // AdminLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ClientSize = new System.Drawing.Size(1181, 665);
+            this.Controls.Add(this.loading);
             this.Controls.Add(this.exitbtn);
             this.Controls.Add(this.showPassBtn);
             this.Controls.Add(this.HidePassBtn);
@@ -322,6 +332,7 @@
             this.Name = "AdminLogin";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AdminLogin";
+            this.Load += new System.EventHandler(this.AdminLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -343,5 +354,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
         private CuoreUI.Controls.cuiButton exitbtn;
+        private Controller.Loading loading;
     }
 }

@@ -39,10 +39,12 @@
             this.gameName = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.desclbl = new CuoreUI.Controls.cuiLabel();
             this.bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.bunifuElipse2 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.bunifuElipse3 = new Bunifu.Framework.UI.BunifuElipse(this.components);
             this.bunifuElipse4 = new Bunifu.Framework.UI.BunifuElipse(this.components);
+            this.gameRelease = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.GameImg)).BeginInit();
             this.panel1.SuspendLayout();
             this.panelcat.SuspendLayout();
@@ -59,7 +61,7 @@
             this.GameImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.GameImg.TabIndex = 0;
             this.GameImg.TabStop = false;
-            this.GameImg.Click += new System.EventHandler(this.GameImg_Click);
+            this.GameImg.MouseClick += new System.Windows.Forms.MouseEventHandler(this.GameImg_MouseClick);
             // 
             // panel1
             // 
@@ -126,6 +128,7 @@
             this.gameName.Size = new System.Drawing.Size(205, 58);
             this.gameName.TabIndex = 0;
             this.gameName.Text = "Game Name";
+            this.gameName.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gameName_MouseClick);
             // 
             // panel3
             // 
@@ -138,11 +141,23 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.GameImg);
+            this.panel2.Controls.Add(this.desclbl);
+            this.panel2.Controls.Add(this.gameRelease);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(211, 366);
             this.panel2.TabIndex = 4;
+            // 
+            // desclbl
+            // 
+            this.desclbl.Content = "Your\\ text\\ here!";
+            this.desclbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 2.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.desclbl.HorizontalAlignment = CuoreUI.Controls.cuiLabel.HorizontalAlignments.Center;
+            this.desclbl.Location = new System.Drawing.Point(14, 123);
+            this.desclbl.Name = "desclbl";
+            this.desclbl.Size = new System.Drawing.Size(32, 19);
+            this.desclbl.TabIndex = 1;
             // 
             // bunifuElipse1
             // 
@@ -164,6 +179,15 @@
             this.bunifuElipse4.ElipseRadius = 20;
             this.bunifuElipse4.TargetControl = this.panelcat;
             // 
+            // gameRelease
+            // 
+            this.gameRelease.AutoSize = true;
+            this.gameRelease.Location = new System.Drawing.Point(79, 76);
+            this.gameRelease.Name = "gameRelease";
+            this.gameRelease.Size = new System.Drawing.Size(35, 13);
+            this.gameRelease.TabIndex = 2;
+            this.gameRelease.Text = "label2";
+            // 
             // GameDesc
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -177,6 +201,7 @@
             this.panel1.ResumeLayout(false);
             this.panelcat.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -196,5 +221,7 @@
         private System.Windows.Forms.Panel panelcat;
         private System.Windows.Forms.Label catName;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse4;
+        private CuoreUI.Controls.cuiLabel desclbl;
+        private System.Windows.Forms.Label gameRelease;
     }
 }

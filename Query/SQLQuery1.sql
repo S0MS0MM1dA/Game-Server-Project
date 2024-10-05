@@ -13,7 +13,7 @@ fullname varchar(50)
 select * from admintbl
 
 INSERT INTO admintbl (username, upass, fullname) 
-VALUES ('durjoy00', '1234', 'Durjoy Podder');
+VALUES ('admin', '123', 'Nawshin Navin');
 
 -----------------------------------------------------
 
@@ -165,7 +165,7 @@ dob date
 select * from usertbl
 ---------------------------------------------
 insert into usertbl (firstname, lastname, gender, email, username, upass, dob)
-values ('Durjoy', 'Podder', 'Male', 'podder@example.com', 'durjoy', '1234', '2003-09-30')
+values ('Hero', 'Alom', 'Male', 'hero.alom@example.com', 'admin', '123', '1999-07-23')
 
 
 create procedure sp_DeleteUser
@@ -200,3 +200,22 @@ BEGIN
     INSERT INTO admintbl(username,upass,fullname) VALUES(@username,@upass,@fullname)
 END
 GO
+--------------------------------------------
+
+CREATE PROCEDURE AddUser
+(
+@firstname varchar(50),
+@lastname varchar(50),
+@gender varchar(50),
+@email varchar(50),
+@username varchar(50),
+@upass varchar(50),
+@dob date
+)
+AS
+BEGIN
+    INSERT INTO usertbl(firstname, lastname, gender, email, username, upass, dob) VALUES(@firstname,@lastname,@gender,@email,@username,@upass,@dob)
+END
+GO
+
+select * from usertbl
